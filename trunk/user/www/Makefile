@@ -9,7 +9,7 @@ include $(ROOTDIR)/user/shared/boards.mk
 PROJECT_HOME_URL="https:\/\/github.com\/hanwckf\/padavan-4.4\/"
 PROJECT_HOME_URL_MOD="https:\/\/github.com\/flowlife\/padavan-4.4\/"
 
-LABEL_COPYRIGHT_TEXT='© 2011-2022 <a href="https:\/\/github.com\/flowlife\/padavan-4.4" target="blank">固件源码 <\/a> \& Firmware Build By Flowlife \& By <a href="https:\/\/github.com\/hanwckf\/padavan-4.4" target="blank">hanwckf<\/a>'
+LABEL_COPYRIGHT_TEXT='© 2011-2022 <a href="https:\/\/github.com\/flowlife\/padavan-4.4" target="blank">固件源码 <\/a> \& Firmware Build By Flowlife \& By <a href="https:\/\/github.com\/hanwckf\/padavan-4.4\/tree\/dev" target="blank">hanwckf<\/a>'
 
 BOARD_PATTERN=s/ZVMODELVZ/$(CONFIG_FIRMWARE_PRODUCT_ID)/g
 COPYR_PATTERN=s/ZVCOPYRVZ/$(LABEL_COPYRIGHT_TEXT)/g
