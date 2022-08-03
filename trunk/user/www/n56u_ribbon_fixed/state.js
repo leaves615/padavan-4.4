@@ -421,7 +421,7 @@ if (found_app_aldriver()){
 	tabtitle[17] = new Array("", "<#menu5_36#>");
 }
 if (found_app_sqm()){
-	tabtitle[18] = new Array("", "#menu5_37#");
+	tabtitle[18] = new Array("", "<#menu5_37#>");
 }
 if (found_app_frp()){
 	tabtitle[19] = new Array("", "<#menu5_25#>");
