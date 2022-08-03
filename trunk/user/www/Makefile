@@ -6,8 +6,8 @@ ROMFS_DIR = $(ROOTDIR)/romfs
 
 include $(ROOTDIR)/user/shared/boards.mk
 
-PROJECT_HOME_URL="https:\/\/bitbucket.org\/padavan\/rt-n56u\/"
-PROJECT_HOME_URL_MOD="https:\/\/github.com\/hanwckf\/rt-n56u\/"
+PROJECT_HOME_URL="https:\/\/github.com\/hanwckf\/padavan-4.4\/"
+PROJECT_HOME_URL_MOD="https:\/\/github.com\/flowlife\/padavan-4.4\/"
 
 LABEL_COPYRIGHT_TEXT='© 2011-2022 <a href="https:\/\/github.com\/flowlife\/padavan-4.4" target="blank">固件源码 <\/a> \& Firmware Build By Flowlife \& By <a href="https:\/\/github.com\/hanwckf\/padavan-4.4" target="blank">hanwckf<\/a>'
 
@@ -121,10 +121,10 @@ ifeq ($(CONFIG_FIRMWARE_INCLUDE_LANG_CN),y)
 	sed $(DWURL_MOD_PATTERN) -i $(ROMFS_DIR)/www/CN.dict
 endif
 	cat $(ROMFS_DIR)/www/EN.header dict/EN.footer > $(ROMFS_DIR)/www/EN.dict
-	sed $(BOARD_PATTERN) -i $(ROMFS_DIR)/www/EN.dict
-	sed $(COPYR_PATTERN) -i $(ROMFS_DIR)/www/EN.dict
-	sed $(DWURL_PATTERN) -i $(ROMFS_DIR)/www/EN.dict
-	sed $(DWURL_MOD_PATTERN) -i $(ROMFS_DIR)/www/EN.dict
+	sed $(BOARD_PATTERN) -i $(ROMFS_DIR)/www/*.dict
+	sed $(COPYR_PATTERN) -i $(ROMFS_DIR)/www/*.dict
+	sed $(DWURL_PATTERN) -i $(ROMFS_DIR)/www/*.dict
+	sed $(DWURL_MOD_PATTERN) -i $(ROMFS_DIR)/www/*.dict
 	rm -f $(ROMFS_DIR)/www/EN.header
 	rm -f $(ROMFS_DIR)/www/bootstrap/js/bootstrap.js
 	rm -f $(ROMFS_DIR)/www/bootstrap/js/engage.itoggle.js
