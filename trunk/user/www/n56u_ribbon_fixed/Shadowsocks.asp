@@ -1792,7 +1792,7 @@ setTimeout('document.getElementById("btn_ctime").style.display="none";',1000);
 															<input type="button" id="btn_add_link" class="btn btn-info" value="添加/导入节点">
 															<input type="button" id="btn_ping_link" class="btn btn-info" value="ping节点">
 															<input type="button" id="btn_aping_link" class="btn btn-info" value="ping全部节点">
-															<input type="button" id="btn_del_link" class="btn btn-danger" value="批量删除节点">
+															<input type="button" id="btn_del_link" class="btn btn-danger" value="删除节点">
 															<input type="button" id="btn_ctime" style="display:none;" class="btn btn-good" value="正在运行脚本:0s" onclick="">
 														</th>
 													</tr>
