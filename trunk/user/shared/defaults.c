@@ -785,13 +785,15 @@ struct nvram_pair router_defaults[] = {
 	{ "wyy_coustom_music", "" },
 	{ "wyy_flac", "0" },
 	{ "wyy_staticnum_x", "0" },
-	
+
+#if defined(APP_ZEROTIER)
 	/*Zerotier*/
 	{ "zerotier_enable", "0" },
 	{ "zerotier_id", "" },
-	{ "zerotier_nat", "0" },
+	{ "zerotier_nat", "1" },
 	{ "zerotier_secret", "" },
 	{ "zero_staticnum_x", "0" },
+#endif
 
 	/*DDNSTO*/
 	{ "ddnsto_enable", "0" },
