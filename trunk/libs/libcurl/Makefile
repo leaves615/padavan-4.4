@@ -1,10 +1,8 @@
-SRC_NAME=curl-7.75.0
-SRC_URL=https://github.com/curl/curl/releases/download/curl-7_75_0/curl-7.75.0.tar.xz
-
-LDFLAGS += -Wl,-rpath-link=$(STAGEDIR)/lib
+SRC_NAME=curl-7.85.0
+SRC_URL=https://github.com/curl/curl/releases/download/curl-7_85_0/$(SRC_NAME).tar.xz
 
 all: download_test extract_test config_test
-	$(MAKE) -j$(HOST_NCPU) -C $(SRC_NAME)
+	$(MAKE) -j $(HOST_NCPU) -C $(SRC_NAME)
 
 download_test:
 	( if [ ! -f $(SRC_NAME).tar.xz ]; then \
@@ -13,8 +11,8 @@ download_test:
 
 extract_test:
 	( if [ ! -d $(SRC_NAME) ]; then \
-		tar xf $(SRC_NAME).tar.xz; \
-		patch -d $(SRC_NAME) -p1 -i ../no_docs_test.patch; \
+		tar xJf $(SRC_NAME).tar.xz; \
+#		patch -d $(SRC_NAME) -p1 -i ../curl-orig.patch; \
 	fi )
 
 config_test:
@@ -26,17 +24,22 @@ config_test:
 
 configure:
 	( cd $(SRC_NAME) ; \
+	autoreconf -fi ; \
 	./configure \
 		--prefix=$(STAGEDIR) \
+		--disable-static \
+		--enable-openssl-auto-load-config \
 		--enable-static \
 		--enable-shared \
 		$(if $(CONFIG_IPV6),--enable-ipv6,--disable-ipv6) \
 		--disable-gopher \
 		--disable-ldap \
 		--disable-ldaps \
+		--disable-rt \
 		--disable-rtsp \
 		--disable-telnet \
 		--disable-tftp \
+		--disable-smb \
 		--disable-smtp \
 		--disable-pop3 \
 		--disable-imap \
@@ -50,15 +53,38 @@ configure:
 		--disable-tls-srp \
 		--disable-libcurl-option \
 		--disable-threaded-resolver \
+		--disable-mqtt \
+		--disable-alt-svc \
+		--disable-hsts \
+		--without-brotli \
+		--disable-ntlm \
+		--without-hyper \
 		--without-gnutls \
-		--without-ca-bundle \
+		--without-ca-path \
+		--without-ca-fallback \
+		--without-cyassl \
+		--without-default-ssl-backend \
 		--without-libidn \
+		--without-libidn2 \
+		--without-libpsl \
+		--without-librtmp \
+		--without-libssh \
 		--without-libssh2 \
 		--without-krb4 \
+		--with-nghttp2 \
 		--without-nss \
+		--without-mbedtls \
+		--without-mesalink \
+		--without-polarssl \
+		--without-schannel \
+		--without-wolfssl \
+		--without-winidn \
+		--without-winssl \
+		--without-zsh-functions-dir \
 		--with-random=/dev/urandom \
 		--with-zlib=$(STAGEDIR) \
 		--with-ssl=$(STAGEDIR) \
+		--with-ca-bundle=/etc/ssl/cert.pem \
 		--host=$(HOST_TARGET) \
 		--build=$(HOST_BUILD) ; \
 	)
