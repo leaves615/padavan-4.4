@@ -35,7 +35,7 @@ struct nvram_pair router_defaults[] = {
 	/* Miscellaneous parameters */
 	{ "time_zone", DEF_TIMEZONE },
 	{ "preferred_lang", "CN" },
-	{ "log_float_ui", "0" },		/* WebUI syslog float panel mode */
+	{ "log_float_ui", "1" },		/* WebUI syslog float panel mode */
 	{ "log_ipaddr", "" },			/* syslog recipient IP */
 	{ "log_port", "514" },			/* syslog recipient Port */
 	{ "log_level", "0" },			/* Bitmask 0:off 1:denied 2:accepted */
@@ -582,8 +582,8 @@ struct nvram_pair router_defaults[] = {
 	{ "ss_turn_ss", "5" },
 	{ "socks5_enable", "nil" }, 	//nil 停用 same 与主服务相同
 	{ "socks5_port", "1088" },
-	{ "ss_update_chnroute", "1" },
-	{ "ss_update_gfwlist", "1" },
+	{ "ss_update_chnroute", "0" },
+	{ "ss_update_gfwlist", "0" },
 	{ "ss_chnroute_url", "https://ispip.clang.cn/all_cn.txt"},
 	{ "ss_adblock", "0" },
 	{ "ss_adblock_url", "https://anti-ad.net/anti-ad-for-dnsmasq.conf"},
@@ -669,7 +669,7 @@ struct nvram_pair router_defaults[] = {
 	{ "adbyby_set", "0" },
 	{ "adbyby_adb_update", "0" },
 	{ "adbyby_update", "2" },
-	{ "hosts_ad", "1" },
+	{ "hosts_ad", "0" },
 	{ "adbyby_update_hour", "03" },
 	{ "adbyby_update_min", "30" },
 	{ "adbyby_ip_x", "0" },
@@ -804,7 +804,7 @@ struct nvram_pair router_defaults[] = {
 	/*Zerotier*/
 	{ "zerotier_enable", "0" },
 	{ "zerotier_id", "" },
-	{ "zerotier_nat", "1" },
+	{ "zerotier_nat", "0" },
 	{ "zerotier_secret", "" },
 	{ "zero_staticnum_x", "0" },
 #endif
@@ -1041,7 +1041,7 @@ struct nvram_pair router_defaults[] = {
 	{ "hw_nat_mode", "1" },
 	{ "sw_nat_mode", "0" },
 #if defined(USE_SFE)
-	{ "sfe_enable", "2" },
+	{ "sfe_enable", "0" },
 #endif
 	{ "fw_syn_cook", "0" },
 	{ "fw_mac_drop", "0" },
