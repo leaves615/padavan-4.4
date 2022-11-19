@@ -1,44 +1,33 @@
-SRC_NAME=openssl-1.1.1q
+SRC_NAME=openssl-1.1.1s
 SRC_URL=https://www.openssl.org/source/$(SRC_NAME).tar.gz
 
 # openssl use CROSS_COMPILE prefix
-CC=gcc $(CPUFLAGS)
-CXX=g++ $(CPUFLAGS)
-AR=ar
-RANLIB=ranlib
+CC = gcc
+AR = ar
+RANLIB = ranlib
+CXX = g++
 
-COPTS=$(CFLAGS) -Os
-COPTS+=$(if $(CONFIG_IPV6),-DOPENSSL_USE_IPV6=1,)
-COPTS+=-DOPENSSL_SMALL_FOOTPRINT
-COPTS+=-DOPENSSL_PREFER_CHACHA_OVER_GCM
+COPTS = $(CPUFLAGS) -O3 $(filter-out -O%, $(CFLAGS))
+COPTS += $(if $(CONFIG_IPV6),-DOPENSSL_USE_IPV6=1,)
+COPTS += -DOPENSSL_PREFER_CHACHA_OVER_GCM
 
-LOPTS=-Wl,--gc-sections -L$(DESTDIR)/lib
+CFLAGS := $(COPTS)
+CXXFLAGS := $(COPTS)
 
-OPENSSL_OPTIONS = no-capieng no-cms no-rfc3779 no-seed no-async \
-                  no-ec2m no-err no-idea no-rc5 no-rmd160 no-blake2 \
-                  no-static-engine no-hw-padlock no-md2 no-sse2 no-dso no-ts no-mdc2 \
-                  no-cast no-whirlpool no-sctp no-srp no-ssl3 \
-                  no-aria no-sm2 no-sm3 no-sm4
-
-ifneq ($(CONFIG_FIRMWARE_INCLUDE_TOR),y)
-OPENSSL_OPTIONS += no-threads
-endif
-
-#ifdef CONFIG_CRYPTO_DEV_LINUX
-#OPENSSL_OPTIONS += enable-devcryptoeng
-#else
-OPENSSL_OPTIONS += no-hw no-devcryptoeng
-ifneq ($(CONFIG_FIRMWARE_INCLUDE_TOR),y)
-OPENSSL_OPTIONS += no-engine
-endif
-#endif
+OPENSSL_CIPHERS = no-capieng no-cms no-rfc3779 no-seed \
+  no-ec2m no-err no-threads no-idea no-rc5 no-rmd160 \
+  no-static-engine no-md2 no-sse2 no-dso no-ts no-mdc2 \
+  no-cast no-whirlpool no-sctp no-srp no-ssl2 no-ssl3 \
+  no-async no-blake2 no-hw-padlock no-aria no-hw \
+  no-devcryptoeng no-ssl3-method no-tests no-sm2 \
+  no-sm3 no-sm4 no-afalgeng no-comp
 
 ifneq ($(CONFIG_FIRMWARE_INCLUDE_SSWAN),y)
-OPENSSL_OPTIONS += no-rc2
+OPENSSL_CIPHERS += no-rc2
 endif
 
-ifeq (,$(filter y,$(CONFIG_FIRMWARE_INCLUDE_OPENSSL_EC) $(CONFIG_FIRMWARE_INCLUDE_TOR)))
-OPENSSL_OPTIONS += no-ec
+ifneq ($(CONFIG_FIRMWARE_INCLUDE_OPENSSL_EC),y)
+OPENSSL_CIPHERS += no-ec
 endif
 
 all: download_test extract_test config_test
@@ -52,7 +41,7 @@ download_test:
 extract_test:
 	( if [ ! -d $(SRC_NAME) ]; then \
 		tar -xf $(SRC_NAME).tar.gz; \
-#		patch -d $(SRC_NAME) -p1 < $(SRC_NAME).patch; \
+		patch -d $(SRC_NAME) -p1 < $(SRC_NAME).patch; \
 	fi )
 
 config_test:
@@ -69,9 +58,7 @@ configure:
 		shared \
 		--prefix=$(STAGEDIR) \
 		--openssldir=/etc/ssl \
-		$(COPTS) \
-		$(LOPTS) \
-		$(OPENSSL_OPTIONS) ; \
+		$(OPENSSL_CIPHERS) ; \
 	)
 
 clean:
@@ -83,19 +70,13 @@ clean:
 install:
 	$(MAKE) -C $(SRC_NAME) install_sw DESTDIR=""
 	$(MAKE) -C $(SRC_NAME) install_ssldirs DESTDIR="$(STAGEDIR)"
-	# remove unneeded
 	rm -f $(DESTDIR)/lib/libssl.a
 	rm -f $(DESTDIR)/lib/libcrypto.a
-	# fix pkgconfig
-	sed -i 's,^prefix=.*,prefix=$(STAGEDIR),g' $(STAGEDIR)/lib/pkgconfig/libcrypto.pc
-	sed -i 's,^prefix=.*,prefix=$(STAGEDIR),g' $(STAGEDIR)/lib/pkgconfig/libssl.pc
-	sed -i 's,^prefix=.*,prefix=$(STAGEDIR),g' $(STAGEDIR)/lib/pkgconfig/openssl.pc
 
 romfs:
 	cp -fP $(DESTDIR)/lib/libssl.so* $(ROMFSDIR)/lib
 	cp -fP $(DESTDIR)/lib/libcrypto.so* $(ROMFSDIR)/lib
 	$(ROMFSINST) /etc_ro/openssl.cnf
-	$(ROMFSINST) /etc_ro/ca-certificates.crt
 ifeq ($(CONFIG_FIRMWARE_INCLUDE_OPENSSL_EXE),y)
 	$(ROMFSINST) $(SRC_NAME)/apps/openssl /usr/bin/openssl
 endif
